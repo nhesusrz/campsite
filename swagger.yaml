@@ -1,0 +1,279 @@
+swagger: "2.0"
+info:
+  description: "This is an test challenge for Truenorth company. The main idea is create an REST API for reservations."
+  version: "1.0.0"
+  title: "Swagger Campsite Reservations"
+host: "campsite.swagger.io"
+basePath: "/v2"
+tags:
+- name: "reservation"
+  description: "Everything about reservation in the campsite"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /campsites:
+    get:
+      tags:
+      - "campsite"
+      summary: "Find all campsites"
+      description: "Returns all campsites"
+      operationId: "getAllCampsites"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "List of all campsites"
+          schema:
+            $ref: "#/definitions/Campsite"
+        400:
+          description: "Invalid input"
+    post:
+      tags:
+      - "campsite"
+      summary: "Add a new campsite"
+      description: ""
+      operationId: "addCampsite"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Campsite object that needs to be added to in order to place reservations"
+        required: true
+        schema:
+          $ref: "#/definitions/Campsite"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Campsite"
+    put:
+      tags:
+      - "campsite"
+      summary: "Update an existing campsite"
+      description: ""
+      operationId: "updateCampsite"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Campsite object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Campsite"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successfully updated"
+    delete:
+      tags:
+      - "campsite"
+      summary: "Deletes a campsite"
+      description: ""
+      operationId: "deleteCampsite"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "campsiteId"
+        in: "path"
+        description: "Campsite id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successfully deleted"
+  /campsites/{campsiteId}:
+    get:
+        tags:
+        - "campsite"
+        summary: "Find campsite by ID"
+        description: "Returns a single campsite"
+        operationId: "getCampsiteById"
+        produces:
+        - "application/json"
+        parameters:
+        - name: "campsiteId"
+          in: "path"
+          description: "ID of campsite to return"
+          required: true
+          type: "integer"
+          format: "int64"
+        responses:
+          400:
+            description: "Invalid input"
+          200:
+            description: "Successful operation"
+            schema:
+              $ref: "#/definitions/Campsite"
+  /reservation:
+    post:
+      tags:
+      - "reservation"
+      summary: "Add a new reservation to the campsite"
+      description: ""
+      operationId: "addReservation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Reservation object that needs to be added to the campsite"
+        required: true
+        schema:
+          $ref: "#/definitions/Reservation"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Reservation"
+    put:
+      tags:
+      - "reservation"
+      summary: "Update an existing reservation"
+      description: ""
+      operationId: "updateReservation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Reservation object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Reservation"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successfully updated"
+  /reservation/{reservationId}:
+    get:
+      tags:
+      - "reservation"
+      summary: "Find reservation by ID"
+      description: "Returns a single reservation"
+      operationId: "getReservationById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "reservationId"
+        in: "path"
+        description: "ID of reservation to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Reservation"
+    delete:
+      tags:
+      - "reservation"
+      summary: "Deletes a reservation"
+      description: ""
+      operationId: "deleteReservation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "reservationId"
+        in: "path"
+        description: "Reservation id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "Successfully deleted"
+definitions:
+  Campsite:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      openDate:
+        type: "string"
+        format: "date-time"
+      closeDate:
+        type: "string"
+        format: "date-time"
+      reservationIds:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+  Reservation:
+    type: "object"
+    required:
+    - "email"
+    - "campsiteId"
+    - "name"
+    - "surname"
+    - "arrivalDate"
+    - "departureDate"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+        format: "email"
+      campsiteId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      surname:
+        type: "string"
+      arrivalDate:
+        type: "string"
+        format: "date-time"
+      departureDate:
+        type: "string"
+        format: "date-time"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
